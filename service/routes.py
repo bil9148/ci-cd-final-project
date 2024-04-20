@@ -33,7 +33,7 @@ def index():
 
 
 ############################################################
-# List counters
+# List counter
 ############################################################
 @app.route("/counters", methods=["GET"])
 def list_counters():
