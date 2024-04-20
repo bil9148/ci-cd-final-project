@@ -13,7 +13,7 @@ spec:
           value: $(workspaces.source.path)
       workingDir: $(workspaces.source.path)
       securityContext:
-        runAsNonRoot: true
+        runAsNonRoot: false
         runAsUser: 0
       script: |
         #!/usr/bin/env sh
@@ -50,3 +50,21 @@ spec:
         pip install -r requirements.txt
         echo "Running nosetests with arguments: $(params.args)"
         nosetests $(params.args)
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: openshift-client
+spec:
+  params:
+    - name: script
+      type: string
+      description: The OpenShift CLI script to run
+  steps:
+    - name: oc-cli
+      image: quay.io/openshift/origin-cli:latest
+      script: |
+        #!/bin/sh
+        set -e
+        $(params.script)
+
